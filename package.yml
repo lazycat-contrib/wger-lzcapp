@@ -1,0 +1,18 @@
+package: community.lazycat.app.wger
+name: wger
+version: 0.0.0
+description: "Self-hosted workout and fitness manager: routines, exercises, body weight and nutrition logs."
+min_os_version: "1.5.0"
+homepage: https://github.com/wger-project/wger
+author: wger-project
+license: AGPL-3.0
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: wger
+    description: "健身与训练管理：编排训练计划、记录每次训练、跟踪体重和饮食，带动作库和进度图表。"
+  en:
+    name: wger
+    description: "Self-hosted workout and fitness manager: routines, exercises, body weight and nutrition logs."

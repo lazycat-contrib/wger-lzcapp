@@ -1,0 +1,48 @@
+application:
+  subdomain: wger
+  multi_instance: false
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://wger:8000/
+
+services:
+  wger:
+    # upstream: wger/server:2.7.0
+    image: docker.1ms.run/wger/server:2.7.0
+    environment:
+      - |-
+        DJANGO_SECRET_KEY={{ stable_secret "wger_django_secret" | replace "\r" "" | replace "\n" "" }}
+      - PS_DATABASE_URI=sqlite:////home/wger/src/database.sqlite
+      - CELERY_WORKER_CONCURRENCY=1
+      - DJANGO_STORAGES_STATICFILES_BACKEND=django.contrib.staticfiles.storage.StaticFilesStorage
+      - DJANGO_DEBUG=false
+      - |-
+        SITE_URL=https://{{ .S.AppDomain }}
+      - ALLOW_REGISTRATION=true
+      - TZ=Asia/Shanghai
+    binds:
+      - /lzcapp/var/src:/home/wger/src
+      - /lzcapp/var/media:/home/wger/media
+      - /lzcapp/var/static:/home/wger/static
+
+usage: |
+  wger 是自建的健身与训练管理工具：编训练计划、记录每次训练、跟踪体重和饮食。
+
+  使用方法：
+  1. 打开应用，点注册创建第一个账号（本应用自己的账号体系，没有预置账号）。
+  2. 在训练（Workout）里新建计划，从动作库里挑动作、设组数和重量。
+  3. 每次练完记录下来，在体重（Body weight）和图表里看进度。
+
+  数据与安全：
+  - 数据库（SQLite）、上传的图片和静态文件都保存在 /lzcapp/var 下，卸载应用会一并删除，请定期备份。
+  - Django 密钥由平台稳定密钥生成，每个部署不同，不写成固定值。
+  - 本包不预置任何账号或默认口令，第一个账号由你注册。
+  - 应用经懒猫入口鉴权访问。
+
+  说明：
+  - 单容器部署，使用内置 SQLite，无需额外数据库。
+  - 默认开放注册；如需限制，可在应用管理后台调整。
+  - 未配置邮件服务，找回密码等依赖邮件的功能不可用。
+  - 未做真机验证：注册登录、建训练计划、记录训练、图表统计以及重启后持久化均未在设备上实测。
