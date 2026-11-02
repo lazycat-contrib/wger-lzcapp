@@ -1,6 +1,6 @@
 package: community.lazycat.app.wger
 name: wger
-version: 0.0.0
+version: 2.7.0
 description: "Self-hosted workout and fitness manager: routines, exercises, body weight and nutrition logs."
 min_os_version: "1.5.0"
 homepage: https://github.com/wger-project/wger
